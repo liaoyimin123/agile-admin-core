@@ -9,21 +9,16 @@ php7.4 + mysql5.7 + nginx/apache
 部署流程
 
 1.git 拉取代码
-
 git clone https://github.com/liaoyimin123/agile-admin-core.git
 
 2.启动服务
-
 php artisan serve
 
 3.项目根目录复制.env.example文件重命名为.env文件
-
 配置mysql连接信息即可
 
 4.自动化导入数据表结构
-
 php artisan migrate
 
 5.自动化导入数据
-
 php artisan db:seed
