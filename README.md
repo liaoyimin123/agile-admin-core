@@ -22,3 +22,9 @@ php artisan migrate
 
 5.自动化导入数据
 php artisan db:seed
+
+6.生成符号链接
+php artisan storage:link
+
+7.项目根目录下给storage目录最高权限
+chmod -R 777 storage
