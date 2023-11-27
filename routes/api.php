@@ -25,6 +25,7 @@ use App\Http\Middleware\VerifyToken;
 */
 
 Route::post('/login', [LoginController::class, 'login']);
+Route::get('/getCaptcha', [LoginController::class, 'getCaptcha']);
 Route::post('/logout', [LoginController::class, 'logout']);
 Route::get('/infoByToken', [UserController::class, 'infoByToken']);
 Route::middleware([VerifyToken::class, VerifyAuth::class, SystemLog::class])->group(function () {

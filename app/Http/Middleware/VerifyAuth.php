@@ -18,11 +18,16 @@ class VerifyAuth
      */
     public function handle(Request $request, Closure $next)
     {
+
         // 1.查询用户所拥有的角色信息
-        $user = User::select('roles')
+        $user = User::select(['roles', 'username'])
             ->find($request['uid']);
         if (!$user) {
             return Response()->json(['msg' => '用户不存在，你无权访问', 'data' => [], 'code' => 403]);
+        }
+        // 判断如果用户是admin则直接放行
+        if ($user['username'] == 'admin') {
+            return $next($request);
         }
         $roleIds = json_decode($user['roles'], true);
         if (!$roleIds) {
@@ -30,9 +35,8 @@ class VerifyAuth
         }
         // 2.查询角色所拥有的权限信息
         $role = Role::whereIn('id', $roleIds)
-            ->pluck('auths')
-            ->toArray();
-        if (!$role) {
+            ->pluck('auths');
+        if (!$role[0]) {
             return Response()->json(['msg' => '角色不存在，你无权访问', 'data' => [], 'code' => 403]);
         }
         // 定义权限id数组

@@ -7,8 +7,8 @@ use Firebase\JWT\Key;
 
 Class TokenService
 {
-    public $key = 'mango';
-    public $expTime = 60 * 60 * 7;
+    public $key = 'agile-token';
+    public $expTime = 60 * 60 * 24;
     /**
      * 创建 token
      * @param token过期时间 单位:秒 例子：7200=2小时

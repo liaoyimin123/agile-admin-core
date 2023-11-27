@@ -14,6 +14,10 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $params = $request->all();
+        // 校验验证码
+        if(!captcha_api_check($params['captcha'], $params['key'], 'math')) {
+            return $this->error('验证码失效或者输入错误');
+        }
         // 查询数据库
         $user = User::where('username', $params['username'])->first();
         if (!$user) {
@@ -23,7 +27,6 @@ class LoginController extends Controller
         if (!$user['status']) {
             return $this->error('用户处于禁用状态，请联系管理员解除');
         }
-        // dd(password_hash($params['password'], PASSWORD_DEFAULT));
         if (!password_verify($params['password'], $user['password'])) {
             return $this->error('账号或者密码错误');
         }
@@ -31,6 +34,15 @@ class LoginController extends Controller
         $token = new TokenService();
         $k = $token->createToken($user['id']);
         return $this->success('登录成功', ['token' => $k]);
+    }
+
+    /**
+     * 获取验证码
+     */
+    public function getCaptcha()
+    {
+        $captcha = app('captcha')->create('math', true);
+        return $this->success('获取验证码成功', $captcha);
     }
 
     /**
